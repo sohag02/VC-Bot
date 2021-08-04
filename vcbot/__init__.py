@@ -1,5 +1,7 @@
+import os
 from pyrogram import Client, idle
 from config import Config
+import asyncio
 
 from pytgcalls import GroupCallFactory
 
@@ -20,27 +22,38 @@ def transcode(filename: str):
         ar="48k",
         loglevel="error",
     ).overwrite_output().run()
+    os.remove(filename)
     return out_file
+    
 
-def download_song(url,service="youtube"):
+def download_song(url, thumnail = True, service="youtube"):
     video = pafy.new(url)
 
     title = video.title
     thum = video.thumb
     length = video.duration
 
-    thum_path = wget.download(thum)
+    if thumnail == True:
+        thum_path = wget.download(thum)
+    else:
+        thum_path = None
 
     audio = video.getbestaudio()
     path = wget.download(audio.url, out = title + ".mp3")
     caption = f"Tittle : {title}\nlength : {length}"
-    return path, thum, title, length, caption
+    os.remove(path)
+
+    return path, thum_path, title, length, caption
 
 
 def download_and_transcode(url):
-    path, thum, title, length, caption = download_song(url)
+    path, thum, title, length, caption = download_song(url, thumnail=False)
     raw_file = transcode(path)
     return raw_file, title, length
+
+async def run_async(func, *args, **kwargs):
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(None, func, *args, **kwargs)
 
 app = Client(
     'vc-bot',

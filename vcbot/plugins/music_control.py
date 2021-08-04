@@ -67,8 +67,22 @@ async def play(client, message : Message):
 #     if is_connected:
 #         group_call
 
+@app.on_message(filters.regex("^/playlist$"))
+async def radio(client, message : Message):
+    if len(playlist) == 0:
+        await message.reply("There are no song in the playlist")
+        return
 
-@app.on_message(filters.regex("/play"))
+    msg = "The following songs are added in the playlist\n\n"
+    count = 0
+    for song in playlist:
+        count += 1
+        msg += f"{count}. {song}\n" 
+
+    await message.reply(msg)
+
+
+@app.on_message(filters.regex("^/play"))
 async def play(client, message : Message):
     if message.reply_to_message:
         service = "telegram"
@@ -107,7 +121,7 @@ async def play(client, message : Message):
             elif len(playlist) == 0:
                 playlist.append(file)
                 group_call.input_filename = file
-                print("playing : ", file)
+                print("\nplaying : ", file)
                 
             pos = playlist.index(file)
             await msg.edit(f"Added to playlist at no. {pos}!")
@@ -143,24 +157,10 @@ async def play(client, message : Message):
     # #print(search)
 
 
-@app.on_message(filters.regex("/playlist"))
-async def radio(client, message : Message):
-    if len(playlist) == 0:
-        await message.reply("There are no song in the playlist")
-        return
-
-    msg = "The following songs are added in the playlist\n\n"
-    count = 0
-    for song in playlist:
-        count += 1
-        msg += f"{count}. {song}\n" 
-
-    await message.reply(msg)
-
-
 @app.on_message(filters.regex("/skip"))
 async def skip(client, message : Message):
     """Skip the currently playing song"""
-    group_call.input_filename = playlist[0]
+    playlist.pop(0)
+    group_call.input_filename = playlist[1]
     await message.reply("Skipped the current song")
-    
+

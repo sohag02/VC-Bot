@@ -29,7 +29,7 @@ async def download(client, message : Message):
         return
 
     await msg.edit("Downloading...")
-    path, thum_path, title, length, cap = download_song(link)
+    path, thum_path, title, length, cap = download_song(link, thumnail=True)
 
     # def progress_pyro(current, total, width=80):
     #     progress_msg = "Downloading: %d%% [%d / %d] bytes" % (current / total * 100, current, total)

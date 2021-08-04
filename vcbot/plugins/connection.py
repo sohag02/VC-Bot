@@ -5,7 +5,7 @@ from pyrogram.raw.types import InputPeerChannel
 from vcbot import player, group_call, app
 
 
-@player.on_message(filters.regex('/join'))
+@app.on_message(filters.regex('/join'))
 async def join_handler(_, message : Message):
     print("Joined")
     try:
@@ -23,7 +23,7 @@ async def join_handler(_, message : Message):
     # await message.reply("Successfully joined VC!")
     await app.send_message(message.chat.id ,"Successfully joined VC!", reply_to_message_id=message.message_id)
 
-@player.on_message(filters.regex("/d"))
+@app.on_message(filters.regex("/d"))
 async def leave_handler(_, message : Message):
     await group_call.leave_current_group_call()
     await app.send_message(message.chat.id ,"Disconnected from voice chat..", reply_to_message_id=message.message_id)
