@@ -42,7 +42,7 @@ async def on_network_changed(context, is_connected):
         await app.send_message(Config.CHAT_ID, "No song to play in the playlist")
 
 
-@app.on_message(filters.command("pause"))
+@app.on_message(filters.regex("/pause"))
 async def play(client, message : Message):
     if vcstatus['call'] == "paused":
         await message.reply("VC is already paused. Send /resume to resume")
@@ -51,7 +51,7 @@ async def play(client, message : Message):
         vcstatus['call'] = "paused"
         await message.reply("Paused current song. Send /resume to resume")
 
-@app.on_message(filters.command("resume"))
+@app.on_message(filters.regex("/resume"))
 async def play(client, message : Message):
     if vcstatus['call'] == "playing":
         await message.reply("VC is already playing. Send /resume to resume")
@@ -157,3 +157,10 @@ async def radio(client, message : Message):
 
     await message.reply(msg)
 
+
+@app.on_message(filters.regex("/skip"))
+async def skip(client, message : Message):
+    """Skip the currently playing song"""
+    group_call.input_filename = playlist[0]
+    await message.reply("Skipped the current song")
+    
