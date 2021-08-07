@@ -1,11 +1,8 @@
 from pyrogram import filters
 from pyrogram.types import Message
-from pyrogram.types.inline_mode.inline_query_result import InlineQueryResult
-import pafy
-import asyncio
-import wget
 from vcbot import app
-from vcbot import download_song
+from vcbot.helpers import download_song, run_async
+import asyncio
 
 
 def to_seconds(duration : str):
@@ -25,18 +22,16 @@ async def download(client, message : Message):
     try:
         link = message.command[1]
     except:
-        msg.edit("Give a link of a song")
+        await msg.edit("Give a link of a song")
         return
 
     await msg.edit("Downloading...")
-    path, thum_path, title, length, cap = download_song(link, thumnail=True)
+    path, thum_path, title, length, cap = await run_async(download_song, link, message)
 
     # def progress_pyro(current, total, width=80):
     #     progress_msg = "Downloading: %d%% [%d / %d] bytes" % (current / total * 100, current, total)
-    #     try:
-    #         asyncio.ensure_future(msg.edit(progress_msg))
-    #     except:
-    #         print("Fload Wait")
+    #     asyncio.ensure_future(msg.edit(progress_msg))
+    #     asyncio.sleep(1)
 
     # def progress(current, total):
     #     try:

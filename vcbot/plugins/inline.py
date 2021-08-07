@@ -1,19 +1,25 @@
 from pyrogram.types import InlineQuery, InlineQueryResultArticle, InputTextMessageContent
-from pyrogram.types.inline_mode.inline_query_result import InlineQueryResult
-from youtubesearchpython import VideosSearch
+from youtubesearchpython.__future__ import VideosSearch
 from vcbot import app
+
 
 @app.on_inline_query()
 async def search(client, InlineQuery : InlineQuery):
     ans = []
+    blank = InlineQueryResultArticle(
+                    title="Dynamic VC Player",
+                    description="Enter any Song name to search and download",
+                    input_message_content=InputTextMessageContent(
+                        ("**This is Dynamic Vc Player Bot**\n\n"
+                        "Enter any song name to search")
+                        ),
+                    thumb_url="https://telegra.ph/file/5a451086a26b8eff9f201.jpg"
+                )
     query = InlineQuery.query
     if query == "":
-        ans.append(
-             InlineQueryResultArticle("Search Song", InputTextMessageContent("Search any song"))
-         )
         await app.answer_inline_query(
             InlineQuery.id,
-            results=ans,
+            results=[blank],
             switch_pm_text=("Search a youtube video"),
             switch_pm_parameter="help",
             cache_time=0
@@ -21,7 +27,9 @@ async def search(client, InlineQuery : InlineQuery):
     else:
         string = query.lower()
         src = VideosSearch(string)
-        for v in src.result()["result"]:
+        vidoes = await src.next()
+        for v in vidoes["result"]:
+        #for v in vidoes:
             ans.append(
                 InlineQueryResultArticle(
                     title=v["title"],
@@ -30,17 +38,17 @@ async def search(client, InlineQuery : InlineQuery):
                         v["viewCount"]["short"]
                     ),
                     input_message_content=InputTextMessageContent(
-                        "/song https://www.youtube.com/watch?v={} ".format(
+                        "/play https://www.youtube.com/watch?v={} ".format(
                             v["id"]
                         )
                     ),
                     thumb_url=v["thumbnails"][0]["url"]
                 )
             )
-            await app.answer_inline_query(
-            InlineQuery.id,
-            results=ans,
-            switch_pm_text=("Search Results"),
-            switch_pm_parameter="help",
-            cache_time=0
+        await app.answer_inline_query(
+        InlineQuery.id,
+        results=ans,
+        switch_pm_text=("Search Results"),
+        switch_pm_parameter="help",
+        cache_time=0
         )

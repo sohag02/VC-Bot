@@ -1,59 +1,32 @@
-import os
-from pyrogram import Client, idle
+from pyrogram import Client
+from pyrogram.types import Message
 from config import Config
-import asyncio
-
 from pytgcalls import GroupCallFactory
+import os
 
 vcstatus = {"call" : "Not started"}
 
-import ffmpeg
-import pafy
-import wget
+if os.path.exists("songs/") == True:
+    print("Download Path Exist")
+else:
+    os.mkdir("songs")
+    print("Download Path Created")
 
 
-def transcode(filename: str):
-    out_file = f"{filename}.raw"
-    a= ffmpeg.input(filename).output(
-        f"{filename}.raw",
-        format="s16le",
-        acodec="pcm_s16le",
-        ac=2,
-        ar="48k",
-        loglevel="error",
-    ).overwrite_output().run()
-    os.remove(filename)
-    return out_file
+def is_admin():
     
+    def decorator(func):
 
-def download_song(url, thumnail = True, service="youtube"):
-    video = pafy.new(url)
+        async def wrapped(client, message : Message):
+            
+            user = await app.get_chat_member(Config.CHAT_ID, message.from_user.id)
+            if user.status in ['creator', 'administrator'] and message.chat.type not in ["private"]:
+                await func(client, message)
+            else:
+                await message.reply("You are not a Admin")
 
-    title = video.title
-    thum = video.thumb
-    length = video.duration
-
-    if thumnail == True:
-        thum_path = wget.download(thum)
-    else:
-        thum_path = None
-
-    audio = video.getbestaudio()
-    path = wget.download(audio.url, out = title + ".mp3")
-    caption = f"Tittle : {title}\nlength : {length}"
-    os.remove(path)
-
-    return path, thum_path, title, length, caption
-
-
-def download_and_transcode(url):
-    path, thum, title, length, caption = download_song(url, thumnail=False)
-    raw_file = transcode(path)
-    return raw_file, title, length
-
-async def run_async(func, *args, **kwargs):
-    loop = asyncio.get_running_loop()
-    return await loop.run_in_executor(None, func, *args, **kwargs)
+        return wrapped
+    return decorator
 
 app = Client(
     'vc-bot',
