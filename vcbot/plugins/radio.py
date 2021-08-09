@@ -1,9 +1,9 @@
-import os
 import ffmpeg
 from pyrogram.types import Message
 from pyrogram import filters
 from config import Config
-from vcbot import vcstatus, app, group_call
+from vcbot import vcstatus, app, group_call, is_admin
+from helpers import change_vc_title
 import signal
 
 
@@ -13,6 +13,7 @@ FFMPEG_PROCESSES = {}
 
 
 @app.on_message(filters.regex("/radio"))
+@is_admin()
 async def radio(client, message : Message):
     msg = await message.reply("Processing...")
     vcstatus["call"] = "radio"
@@ -25,22 +26,26 @@ async def radio(client, message : Message):
             ar='48k'
         ).overwrite_output().run_async()
 
-    FFMPEG_PROCESSES[Config.CHAT_ID] = process
+    FFMPEG_PROCESSES[message.chat.id] = process
 
     group_call.input_filename = "radio.raw"
+    await change_vc_title("Radio")
 
     await msg.edit("Radio Started")
 
 @app.on_message(filters.regex("/stopradio"))
+@is_admin()
 async def radio(client, message : Message):
-    vcstatus["call"] = "not started"
-    process = FFMPEG_PROCESSES.get(Config.CHAT_ID)
+    if vcstatus["call"] == "radio":
+        vcstatus["call"] = "not started"
+        process = FFMPEG_PROCESSES.get(message.chat.id)
 
-    if process:
-        process.send_signal(signal.SIGTERM)
-    print("FFMPEG")
-    group_call.stop_playout()
-    #group_call.input_filename = "input.raw"
+        if process:
+            process.send_signal(signal.SIGTERM)
+        print("FFMPEG")
+        group_call.stop_playout()
 
-    await message.reply("Stoped Radio")
+        await message.reply("Stoped Radio")
+    else:
+        await message.reply("Radio is not running")
 

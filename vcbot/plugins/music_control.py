@@ -1,11 +1,10 @@
-from pyrogram import filters
-from pyrogram.types import Message
+from re import S
+from pyrogram import filters, emoji
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from vcbot import group_call, app, vcstatus
-from youtubesearchpython import VideosSearch
 from vcbot import is_admin
-from vcbot.helpers import *
 from config import Config
-from youtubesearchpython import VideosSearch
+from helpers import change_vc_title
 
 
 
@@ -29,12 +28,13 @@ async def on_network_changed(context, is_connected):
         playlist.pop(0)
         group_call.input_filename = playlist[0]
         print("E playing : ", playlist[0])
+        await change_vc_title(group_call.input_filename.replace("songs/", ""))
         
     else:
         if vcstatus["call"] == "radio":
             pass
-        else:
-            await app.send_message(Config.CHAT_ID, "No song to play in the playlist")
+        # else:
+        #     await app.send_message(Config.CHAT_ID, "No song to play in the playlist")
 
 
 
@@ -43,8 +43,6 @@ async def on_network_changed(context, is_connected):
 async def play(client, message : Message):
     if vcstatus['call'] == "paused":
         await message.reply("VC is already paused. Send /resume to resume")
-    elif vcstatus['call'] == "not started":
-        await message.reply("VC not started yet")
     else:
         group_call.pause_playout()
         vcstatus['call'] = "paused"
@@ -56,14 +54,10 @@ async def play(client, message : Message):
 async def play(client, message : Message):
     if vcstatus['call'] == "playing":
         await message.reply("VC is already playing. Send /resume to resume")
-    elif vcstatus['call'] == "not started":
-        await message.reply("VC not started yet")
     else:
         group_call.resume_playout()
         vcstatus['call'] = "playing"
         await message.reply("Resumed current song. Send /pause to pause")\
-
-
 
 
 @app.on_message(filters.regex("^/playlist$"))
@@ -77,85 +71,29 @@ async def radio(client, message : Message):
     count = 0
     for song in playlist:
         count += 1
-        msg += f"{count}. {song}\n\n" 
-
-    await message.reply(msg)
-
-
-@app.on_message(filters.regex("^/play"))
-@is_admin()
-async def play(client, message : Message):
-    if vcstatus["call"] == "radio":
-        group_call.stop_playout()
-        await message.reply("Radio Stoped!")
-
-    # if vcstatus["call"] == "not started":
-    #     await group_call.start(Config.CHAT_ID)
-        
-    if message.reply_to_message:
-        service = "telegram"
-    else:
-        service = "youtube"
-    if service == "youtube":
-        msg = await message.reply("Searching...")
-        try:
-            link = message.text.replace("/play", "")
-        except:
-            await message.edit("Provide a valid url or song name to play or reply to a file")
-            return
-
-        if "www.youtube.com" in link:
-            await msg.edit("Downloading...")
-            file, title, length = await run_async(download_and_transcode, link) #download_and_transcode(link)
-            if len(playlist) > 0:
-                playlist.append(file)
-                print(file)
-            elif len(playlist) == 0:
-                playlist.append(file)
-                group_call.input_filename = file
-                print("playing : ", file)
-
-            pos = playlist.index(file)
-            await msg.delete()
-            await message.reply(f"Added to playlist at no. {pos + 1}!")
-            print("\n" + file)
+        s = song.replace("songs/","")
+        if song == group_call.input_filename:
+            msg += f"{emoji.PLAY_BUTTON}**{count}. {s}**\n\n"
         else:
-            src = VideosSearch(link, limit=1)
-            await msg.edit("Downloading...")
-            u = "https://www.youtube.com/watch?v=" + src.result()['result'][0]['id']
-            file, title, length = await run_async(download_and_transcode, u, message)
-            if len(playlist) > 0:
-                playlist.append(file)
-                print(file)
-            elif len(playlist) == 0:
-                playlist.append(file)
-                group_call.input_filename = file
-                print("\nplaying : ", file)
-                
-            pos = playlist.index(file)
-            await msg.delete()
-            await message.reply(f"Added to playlist at no. {pos + 1}!")
-            print("\n" + file)
+            msg += f"  **{count}. {s}**\n\n"
 
-    else:
-        msg = await message.reply("Downloading...")
-        path = message.reply_to_message.download("song.mp3")
+    btns = InlineKeyboardMarkup([
+        [InlineKeyboardButton(emoji.REPEAT_BUTTON, "repeat"), InlineKeyboardButton(emoji.PLAY_OR_PAUSE_BUTTON, "play_pause"),
+        InlineKeyboardButton(emoji.NEXT_TRACK_BUTTON, "skip")]
+    ])
 
-        file = run_async(transcode, path)
-        if len(playlist) > 0:
-                playlist.append(file)
-                print(file)
-        elif len(playlist) == 0:
-            playlist.append(file)
-            group_call.input_filename = file
-            print("\nplaying : ", file)
-                
-        pos = playlist.index(file)
-        await msg.edit(f"Added to playlist at no. {pos + 1}!")
-        print("\n" + file)
+    await message.reply(msg, reply_markup=btns)
+
+
+@app.on_message(filters.regex("^/reload"))
+@is_admin()
+async def reload(client, message : Message):
+    group_call.restart_playout()
+    await message.reply("Reloaded File")
 
 
 @app.on_message(filters.regex("/skip"))
+# @app.on_callback_query(filters.regex(emoji.NEXT_TRACK_BUTTON))
 @is_admin()
 async def skip(client, message : Message):
     playlist.pop(0)

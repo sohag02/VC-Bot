@@ -18,12 +18,15 @@ def is_admin():
     def decorator(func):
 
         async def wrapped(client, message : Message):
-            
-            user = await app.get_chat_member(Config.CHAT_ID, message.from_user.id)
-            if user.status in ['creator', 'administrator'] and message.chat.type not in ["private"]:
-                await func(client, message)
+            chat_id = message.chat.id
+            if chat_id in Config.CHAT_ID:
+                user = await app.get_chat_member(message.chat.id , message.from_user.id)
+                if user.status in ['creator', 'administrator'] and message.chat.type not in ["private"]:
+                    await func(client, message)
+                else:
+                    await message.reply("You are not a Admin")
             else:
-                await message.reply("You are not a Admin")
+                await message.reply("This Bot is not made for your group")
 
         return wrapped
     return decorator

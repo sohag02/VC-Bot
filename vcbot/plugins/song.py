@@ -1,8 +1,7 @@
 from pyrogram import filters
 from pyrogram.types import Message
 from vcbot import app
-from vcbot.helpers import download_song, run_async
-import asyncio
+from helpers import download_song, run_async
 
 
 def to_seconds(duration : str):

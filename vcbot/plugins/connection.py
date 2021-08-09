@@ -2,7 +2,10 @@ from pyrogram import filters
 from pyrogram.types import Message
 from pyrogram.raw.functions.phone import CreateGroupCall
 from pyrogram.raw.types import InputPeerChannel
-from vcbot import group_call, app
+from vcbot import group_call, app, vcstatus
+from vcbot.plugins.radio import FFMPEG_PROCESSES
+import signal
+import logging
 
 
 @app.on_message(filters.regex('^/join$'))
@@ -11,19 +14,31 @@ async def join_handler(_, message : Message):
     try:
         await group_call.start(message.chat.id)
     except:
-        peer = await app.resolve_peer(message.chat.id)
-        CreateGroupCall(
-            peer=InputPeerChannel(
-                channel_id=peer.channel_id,
-                access_hash=peer.access_hash,
-            ),
-            random_id=app.rnd_id() // 9000000000,
-        )
-        await group_call.start(message.chat.id)
+        try:
+            peer = await app.resolve_peer(message.chat.id)
+            CreateGroupCall(
+                peer=InputPeerChannel(
+                    channel_id=peer.channel_id,
+                    access_hash=peer.access_hash,
+                ),
+                random_id=app.rnd_id() // 9000000000,
+            )
+            await group_call.start(message.chat.id)
+        except:
+            await message.reply("Please make me admin with manage voice chat permissions "
+                                "or start voice chat manually and then use /join")
+            return
     
     await app.send_message(message.chat.id ,"Successfully joined VC!", reply_to_message_id=message.message_id)
+    logging.info(f"Joined VC : @{message.chat.username}")
 
-@app.on_message(filters.regex("^/disconectvc$"))
+@app.on_message(filters.regex("/disconectvc"))
 async def leave_handler(_, message : Message):
     await group_call.leave_current_group_call()
-    await app.send_message(message.chat.id ,"Disconnected from voice chat..", reply_to_message_id=message.message_id)
+    if vcstatus["call"] == "radio":
+        process = FFMPEG_PROCESSES.get(message.chat.id)
+        if process:
+            process.send_signal(signal.SIGTERM)
+
+    await message.reply("Disconnected from voice chat..")
+    logging.info(f"Disconected VC : @{message.chat.username}")
