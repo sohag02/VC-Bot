@@ -2,13 +2,14 @@ from pyrogram import filters
 from pyrogram.types import Message
 from pyrogram.raw.functions.phone import CreateGroupCall
 from pyrogram.raw.types import InputPeerChannel
-from vcbot import group_call, app, vcstatus
+from vcbot import group_call, app, vcstatus, is_admin
 from vcbot.plugins.radio import FFMPEG_PROCESSES
 import signal
 import logging
 
 
 @app.on_message(filters.regex('^/join$'))
+@is_admin()
 async def join_handler(_, message : Message):
     print("Joined")
     try:
@@ -33,6 +34,7 @@ async def join_handler(_, message : Message):
     logging.info(f"Joined VC : @{message.chat.username}")
 
 @app.on_message(filters.regex("/disconectvc"))
+@is_admin()
 async def leave_handler(_, message : Message):
     await group_call.leave_current_group_call()
     if vcstatus["call"] == "radio":

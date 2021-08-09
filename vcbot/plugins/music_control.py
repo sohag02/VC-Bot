@@ -3,7 +3,6 @@ from pyrogram import filters, emoji
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from vcbot import group_call, app, vcstatus
 from vcbot import is_admin
-from config import Config
 from helpers import change_vc_title
 
 

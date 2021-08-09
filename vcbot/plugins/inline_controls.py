@@ -1,4 +1,4 @@
-from vcbot import app, group_call
+from vcbot import app, group_call, vcstatus
 from .music_control import playlist
 from pyrogram.types import CallbackQuery
 from pyrogram import filters, emoji
@@ -14,15 +14,17 @@ async def controls(client, query : CallbackQuery):
 
 @app.on_callback_query(filters.regex("play_pause"))
 async def controls(client, query : CallbackQuery):
-    if group_call.__is_playout_paused:
+    if vcstatus["call"] == "paused":
         msg = query.message.text.markdown
         await query.edit_message_caption(msg.replace(emoji.PAUSE_BUTTON, emoji.PLAY_BUTTON))
         await group_call.resume_playout()
+        vcstatus["call"] = "playing"
         await query.answer("Resumed")
-    else:
+    elif vcstatus["call"] == "playing":
         msg = query.message.text.markdown
         await query.edit_message_caption(msg.replace(emoji.PLAY_BUTTON, emoji.PAUSE_BUTTON))
         await group_call.pause_playout()
+        vcstatus["call"] = "paused"
         await query.answer("Paused")
 
 @app.on_callback_query(filters.regex("repeat"))
