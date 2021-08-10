@@ -1,17 +1,19 @@
 import ffmpeg
 import pafy
-from pyrogram.raw.functions.channels import GetFullChannel
+from pyrogram.raw.types import InputGroupCall
+# from pyrogram.raw.functions.channels import GetFullChannel
 from pyrogram.raw.functions.phone import EditGroupCallTitle
 import wget
 import asyncio
-from vcbot import player
-from config import Config
+from vcbot import player, group_call
 
 
 async def change_vc_title(title: str):
-    peer = await player.resolve_peer(Config.CHAT_ID)
-    chat = await player.send(GetFullChannel(channel=peer))
-    data = EditGroupCallTitle(call=chat.full_chat.call, title=title)
+    # peer = await player.resolve_peer(Config.CHAT_ID)
+    # chat = await player.send(GetFullChannel(channel=peer))
+    call = InputGroupCall(id=group_call.group_call.id, access_hash=group_call.group_call.access_hash)
+    data = EditGroupCallTitle(call=call, title=title)
+    
     await player.send(data)
 
 

@@ -1,6 +1,6 @@
 import ffmpeg
 from pyrogram.types import Message
-from pyrogram import filters
+from pyrogram import filters, emoji
 from config import Config
 from vcbot import vcstatus, app, group_call, is_admin
 from helpers import change_vc_title
@@ -29,7 +29,7 @@ async def radio(client, message : Message):
     FFMPEG_PROCESSES[message.chat.id] = process
 
     group_call.input_filename = "radio.raw"
-    await change_vc_title("Radio")
+    await change_vc_title(f"Radio | Music 24/7 {emoji.MUSICAL_NOTE}")
 
     await msg.edit("Radio Started")
 
