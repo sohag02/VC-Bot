@@ -4,6 +4,8 @@ from pyrogram.types import Message
 from helpers import run_async, download_and_transcode, transcode, change_vc_title
 from .music_control import playlist
 from youtubesearchpython import VideosSearch
+import signal
+from .radio import FFMPEG_PROCESSES
 
 
 
@@ -13,6 +15,10 @@ from youtubesearchpython import VideosSearch
 async def play(client, message : Message):
     if vcstatus["call"] == "radio":
         group_call.stop_playout()
+        process = FFMPEG_PROCESSES.get(message.chat.id)
+
+        if process:
+            process.send_signal(signal.SIGTERM)
         await message.reply("Radio Stoped!")
 
     # if vcstatus["call"] == "not started":
@@ -32,7 +38,7 @@ async def play(client, message : Message):
 
         if "www.youtube.com" in link:
             await msg.edit("Downloading...")
-            file, title, length = await run_async(download_and_transcode, link) #download_and_transcode(link)
+            file, title, length = await run_async(download_and_transcode, link)
             if len(playlist) > 0:
                 playlist.append(file)
                 print(file)
@@ -49,7 +55,7 @@ async def play(client, message : Message):
             src = VideosSearch(link, limit=1)
             await msg.edit("Downloading...")
             u = "https://www.youtube.com/watch?v=" + src.result()['result'][0]['id']
-            file, title, length = await run_async(download_and_transcode, u, message)
+            file, title, length = await run_async(download_and_transcode, u)
             if len(playlist) > 0:
                 playlist.append(file)
                 print(file)
@@ -79,4 +85,7 @@ async def play(client, message : Message):
         pos = playlist.index(file)
         await msg.edit(f"Added to playlist at no. {pos + 1}!")
         print("\n" + file)
-    await change_vc_title(group_call.input_filename.replace("songs/", ""))
+    ta = group_call.input_filename.replace("songs/", "")
+    tb = ta.replace(".mp3.raw", "")
+    await change_vc_title(tb)
+    
