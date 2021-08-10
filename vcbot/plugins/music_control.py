@@ -36,7 +36,7 @@ async def on_network_changed(context, is_connected):
         #     await app.send_message(Config.CHAT_ID, "No song to play in the playlist")
 
 
-@app.on_message(filters.regex("^/stop"))
+@app.on_message(filters.regex("^/stop$"))
 @is_admin()
 async def play(client, message : Message):
     group_call.stop_playout()
