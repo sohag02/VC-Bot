@@ -7,7 +7,7 @@ from pyrogram import filters, emoji
 @is_admin()
 async def volume(client, message : Message):
     try:
-        v = message.command[1]
+        v = message.text.replace("/volume ", "")
     except:
         await message.reply("Provide a value b/w 1-200")
         return
