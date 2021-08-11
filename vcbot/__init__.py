@@ -42,4 +42,3 @@ player = Client('pytgcalls', api_id=Config.PLAYER_API_ID, api_hash=Config.PLAYER
 
 group_call = GroupCallFactory(player).get_file_group_call('input.raw')
 
-player.send_message(-1001385556080, "Deployed!")
