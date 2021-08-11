@@ -117,5 +117,8 @@ async def reload(client, message : Message):
 async def skip(client, message : Message):
     playlist.pop(0)
     group_call.input_filename = playlist[0]
+    ta = group_call.input_filename.replace("songs/", "")
+    tb = ta.replace(".mp3.raw", "")
+    await change_vc_title(tb)
     await message.reply("Skipped the current song")
 

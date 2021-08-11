@@ -25,7 +25,8 @@ async def join_handler(_, message : Message):
                 random_id=app.rnd_id() // 9000000000,
             )
             await group_call.start(message.chat.id)
-        except:
+        except Exception as e:
+            await message.reply(e)
             await message.reply("Please make me admin with manage voice chat permissions "
                                 "or start voice chat manually and then use /join")
             return
