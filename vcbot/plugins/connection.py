@@ -17,13 +17,14 @@ async def join_handler(_, message : Message):
     except:
         try:
             peer = await app.resolve_peer(message.chat.id)
-            CreateGroupCall(
+            data = CreateGroupCall(
                 peer=InputPeerChannel(
                     channel_id=peer.channel_id,
                     access_hash=peer.access_hash,
                 ),
                 random_id=app.rnd_id() // 9000000000,
             )
+            app.send(data)
             await group_call.start(message.chat.id)
         except Exception as e:
             await message.reply(e)
