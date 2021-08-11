@@ -13,6 +13,7 @@ from .radio import FFMPEG_PROCESSES
 @app.on_message(filters.regex("^/play"))
 @is_admin()
 async def play(client, message : Message):
+    await group_call.set_is_mute(False)
     if vcstatus["call"] == "radio":
         group_call.stop_playout()
         process = FFMPEG_PROCESSES.get(message.chat.id)

@@ -39,8 +39,8 @@ async def on_network_changed(context, is_connected):
 @app.on_message(filters.regex("^/stop$"))
 @is_admin()
 async def play(client, message : Message):
-    group_call.stop_playout()
-    await message.reply("Stopped Music!")
+    group_call.stop()
+    await message.reply("Bot Shutdown!")
 
 
 
