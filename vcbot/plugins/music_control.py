@@ -91,6 +91,19 @@ async def radio(client, message : Message):
     await message.reply(msg, reply_markup=btns)
 
 
+@app.on_message(filters.regex("^/mute"))
+@is_admin()
+async def mute(client, message : Message):
+    group_call.set_is_mute(False)
+    await message.reply("Muted")
+
+
+@app.on_message(filters.regex("^/unmute"))
+@is_admin()
+async def unmute(client, message : Message):
+    group_call.set_is_mute(False)
+    await message.reply("Unmuted")
+
 @app.on_message(filters.regex("^/reload"))
 @is_admin()
 async def reload(client, message : Message):

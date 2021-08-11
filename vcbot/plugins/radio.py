@@ -46,6 +46,7 @@ async def radio(client, message : Message):
         group_call.stop_playout()
 
         await message.reply("Stoped Radio")
+        await change_vc_title("Dynamic VC Player")
     else:
         await message.reply("Radio is not running")
 
