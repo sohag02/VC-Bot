@@ -1,24 +1,26 @@
-[pyrogram.connection.connection - INFO - 2021-08-09 17:38:57,732] - Connecting...
-[pyrogram.connection.connection - INFO - 2021-08-09 17:38:57,875] - Connected! Production DC5 - IPv4 - TCPAbridgedO
-[pyrogram.session.session - INFO - 2021-08-09 17:38:57,877] - NetworkTask started
-[pyrogram.session.internals.msg_id - INFO - 2021-08-09 17:38:58,180] - Time synced: 2021-08-09 12:09:02.420887 UTC
-[pyrogram.session.session - INFO - 2021-08-09 17:38:58,289] - NextSaltTask started
-[pyrogram.session.session - INFO - 2021-08-09 17:38:58,289] - Next salt in 21m 40s (at 2021-08-09 18:00:43)
-[pyrogram.session.session - INFO - 2021-08-09 17:38:58,433] - Session initialized: Layer 126
-[pyrogram.session.session - INFO - 2021-08-09 17:38:58,434] - Device: CPython 3.8.10 - Pyrogram 1.2.9
-[pyrogram.session.session - INFO - 2021-08-09 17:38:58,434] - System: Linux 4.4.0-19041-Microsoft (EN)
-[pyrogram.session.session - INFO - 2021-08-09 17:38:58,434] - Session started
-[pyrogram.session.session - INFO - 2021-08-09 17:38:58,437] - PingTask started
-[pyrogram.dispatcher - INFO - 2021-08-09 17:38:58,679] - Started 12 HandlerTasks
-[pyrogram.connection.connection - INFO - 2021-08-09 17:38:58,757] - Connecting...
-[pyrogram.connection.connection - INFO - 2021-08-09 17:38:59,067] - Connected! Production DC1 - IPv4 - TCPAbridgedO
-[pyrogram.session.session - INFO - 2021-08-09 17:38:59,068] - NetworkTask started
-[pyrogram.session.session - INFO - 2021-08-09 17:39:00,486] - NextSaltTask started
-[pyrogram.session.session - INFO - 2021-08-09 17:39:00,486] - Next salt in 32m 0s (at 2021-08-09 18:11:05)
-[pyrogram.session.session - INFO - 2021-08-09 17:39:01,304] - Session initialized: Layer 126
-[pyrogram.session.session - INFO - 2021-08-09 17:39:01,305] - Device: CPython 3.8.10 - Pyrogram 1.2.9
-[pyrogram.session.session - INFO - 2021-08-09 17:39:01,305] - System: Linux 4.4.0-19041-Microsoft (EN)
-[pyrogram.session.session - INFO - 2021-08-09 17:39:01,305] - Session started
-[pyrogram.session.session - INFO - 2021-08-09 17:39:01,313] - PingTask started
-[pyrogram.dispatcher - INFO - 2021-08-09 17:39:02,237] - Started 12 HandlerTasks
-[root - INFO - 2021-08-09 17:43:14,310] - Stop signal received (2). Exiting...
+[pyrogram.connection.connection - INFO - 2021-08-11 12:21:51,473] - Connecting...
+[pyrogram.connection.connection - INFO - 2021-08-11 12:21:51,618] - Connected! Production DC5 - IPv4 - TCPAbridgedO
+[pyrogram.session.session - INFO - 2021-08-11 12:21:51,620] - NetworkTask started
+[pyrogram.session.internals.msg_id - INFO - 2021-08-11 12:21:51,845] - Time synced: 2021-08-11 06:51:57.729656 UTC
+[pyrogram.session.session - INFO - 2021-08-11 12:21:51,940] - NextSaltTask started
+[pyrogram.session.session - INFO - 2021-08-11 12:21:51,941] - Next salt in 40m 13s (at 2021-08-11 13:02:11)
+[pyrogram.session.session - INFO - 2021-08-11 12:21:52,064] - Session initialized: Layer 126
+[pyrogram.session.session - INFO - 2021-08-11 12:21:52,064] - Device: CPython 3.8.10 - Pyrogram 1.2.9
+[pyrogram.session.session - INFO - 2021-08-11 12:21:52,064] - System: Linux 4.4.0-19041-Microsoft (EN)
+[pyrogram.session.session - INFO - 2021-08-11 12:21:52,064] - Session started
+[pyrogram.session.session - INFO - 2021-08-11 12:21:52,071] - PingTask started
+[pyrogram.dispatcher - INFO - 2021-08-11 12:21:52,313] - Started 12 HandlerTasks
+[pyrogram.connection.connection - INFO - 2021-08-11 12:21:52,376] - Connecting...
+[pyrogram.connection.connection - INFO - 2021-08-11 12:21:52,728] - Connected! Production DC1 - IPv4 - TCPAbridgedO
+[pyrogram.session.session - INFO - 2021-08-11 12:21:52,728] - NetworkTask started
+[pyrogram.session.session - INFO - 2021-08-11 12:21:53,723] - NextSaltTask started
+[pyrogram.session.session - INFO - 2021-08-11 12:21:53,724] - Next salt in 40m 27s (at 2021-08-11 13:02:27)
+[pyrogram.session.session - INFO - 2021-08-11 12:21:54,017] - Session initialized: Layer 126
+[pyrogram.session.session - INFO - 2021-08-11 12:21:54,017] - Device: CPython 3.8.10 - Pyrogram 1.2.9
+[pyrogram.session.session - INFO - 2021-08-11 12:21:54,017] - System: Linux 4.4.0-19041-Microsoft (EN)
+[pyrogram.session.session - INFO - 2021-08-11 12:21:54,018] - Session started
+[pyrogram.session.session - INFO - 2021-08-11 12:21:54,024] - PingTask started
+[pyrogram.dispatcher - INFO - 2021-08-11 12:21:54,361] - Started 12 HandlerTasks
+[root - INFO - 2021-08-11 12:22:00,147] - Joined VC : @Testtt11122233344
+[root - INFO - 2021-08-11 12:22:10,091] - Disconected VC : @Testtt11122233344
+[root - INFO - 2021-08-11 12:23:05,990] - Stop signal received (2). Exiting...

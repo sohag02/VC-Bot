@@ -2,7 +2,7 @@ from pyrogram import filters
 from pyrogram.types import Message
 from pyrogram.raw.functions.phone import CreateGroupCall
 from pyrogram.raw.types import InputPeerChannel
-from vcbot import group_call, app, vcstatus, is_admin
+from vcbot import group_call, app, vcstatus, is_admin, player
 from vcbot.plugins.radio import FFMPEG_PROCESSES
 import signal
 import logging
@@ -16,7 +16,7 @@ async def join_handler(_, message : Message):
         await group_call.start(message.chat.id)
     except:
         try:
-            peer = await app.resolve_peer(message.chat.id)
+            peer = await player.resolve_peer(message.chat.id)
             data = CreateGroupCall(
                 peer=InputPeerChannel(
                     channel_id=peer.channel_id,
@@ -24,7 +24,7 @@ async def join_handler(_, message : Message):
                 ),
                 random_id=app.rnd_id() // 9000000000,
             )
-            await app.send(data)
+            await player.send(data)
             await group_call.start(message.chat.id)
         except Exception as e:
             await message.reply(e)
