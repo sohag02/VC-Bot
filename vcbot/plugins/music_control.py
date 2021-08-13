@@ -69,6 +69,9 @@ async def play(client, message : Message):
 @app.on_message(filters.regex("^/playlist$"))
 @is_admin()
 async def radio(client, message : Message):
+    if vcstatus["call"] == "radio":
+        await message.reply("No playlist while Radio is running")
+
     if len(playlist) == 0:
         await message.reply("There are no song in the playlist")
         return
