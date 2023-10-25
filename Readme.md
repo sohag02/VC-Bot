@@ -1,6 +1,6 @@
 ﻿# Telegram Music Bot 🎵 - Play High Quality Music in Your Approved chats only
 [![Python](https://img.shields.io/badge/Python-v3.9-blue)](https://www.python.org/)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)]
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-no-green.svg)]
 [![License](https://img.shields.io/badge/License-AGPL-blue)](https://github.com/TeamUltroid/Ultroid/blob/main/LICENSE)
 
 This is a Telegram voice chat music player which takes both a Bot and a user account into usage. You will be able to play music in your approved telegram group's voice chat.
@@ -30,7 +30,6 @@ Get the [Necessary Variables](#Necessary-Variables) and then click the button be
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests as appropriate.
 
 ## License
 This Bot is under [AGPL](https://choosealicense.com/licenses/agpl/) License
